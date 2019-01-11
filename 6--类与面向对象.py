@@ -85,7 +85,7 @@ bob = Person()
 
 
 # from abc import ABCMeta, abstractclassmethod
-# class Super(metaclass= ABCMeta):
+# class Super(metaclass=ABCMeta):
 #     @abstractclassmethod    # 这个类不能再被定义了
 #     def action(self):
 #         pass
@@ -95,10 +95,15 @@ bob = Person()
 
 # 8--OOP: 面向对象编程: object-oriented programming
 # (一)OOP和继承: 'is-a'的关系
-# class B:pass
-# class A(B): pass
-# a = A()
-# isinstance(a, B)  # 返回True    # A是B的子类, a也是B的一种
+class B:pass
+class A(B): pass
+a = A()
+isinstance(a, B)  # 返回True    # A是B的子类, a也是B的一种
+# type不会认为子类是一种父类类型, isinstance会认为子类是一种父类类型
+# print(type(a) == A)     # True
+# print(type(a) == B)     # False
+# print(type(a))
+# print(a)
 # (二)OOP和组合: "has-a"的关系
 class A(object):
     def __init__(self,name):
@@ -124,10 +129,90 @@ class wrapper(object):
         return getattr(self.wrapped, attrname)
 
     # 注: 这里使用getattr(X, N)内置函数以变量名字符串N从包装对象X中取出属性. 类似于X.__dict__[N]
-x =wrapper([1, 2, 3])
-x.append(4) # 返回Trace: append" [1, 2, 3, 4]
+x = wrapper([1, 2, 3])
+# x.append(4) # 返回Trace: append" [1, 2, 3, 4]
 # x = wrapper({'a':1, 'b':2})
 # print(list(x.keys()))  # 返回 "Trace: keys" ['a', 'b']
 
-# https://zhuanlan.zhihu.com/p/40446047
-# https://zhuanlan.zhihu.com/p/29747657
+# todo # https://zhuanlan.zhihu.com/p/40446047
+# todo https://zhuanlan.zhihu.com/p/29747657
+
+# 9--类的伪私有属性: 使用__attr
+class C1(object):
+    def __init__(self, name):
+        self.__name = name
+
+    def __str__(self):
+        return "self.name = %s" %self.__name
+
+I = C1('tom')
+# print(I)    # 返回 self.name = tom
+# I.__name = 'jeey'    # 这里无法访问, __name为伪私有属性
+I._C1__name = 'jeey'    # 这里可以修改成功, self.name = jeey
+
+
+# 10--类方法是对象: 无绑定类方法对象 / 绑定实例方法对象
+# class Spam(object):
+#     def doit(self, message):
+#         print(message)
+
+    # 静态方法
+    # def selfless(message):
+    #     print(message)
+
+# obj = Spam()
+# x = obj.doit    # 类的绑定方法对象   实例+函数
+# x('hello world')
+# x = Spam.doit   # 类的无绑定方法对象   类名 + 函数
+# x(obj, 'hello world')
+# x = Spam.selfless   # 类的无绑定方法函数, 在3.0之前无效
+# x('hello world')
+
+
+
+
+# 11--获取对象信息: 属性和方法
+class Myobject: pass
+a = Myobject()
+dir(a)
+hasattr(a, 'x')     # 测试是否有x属性或方法, 即a.x是否已经存在
+setattr(a, 'y', 19) # 设置属性或方法, 等同于a.y = 19
+# 这里有个很骚的技巧, 就是setattr可以设置一个不能访问到的属性, 即只能用getattr获取
+setattr(a, "can't touch", 100)  # 这里的属性名带有空格, 不能直接访问
+# print(getattr(a, "can't touch"))    # 但是可以用getattr获取
+
+class A(object):
+    def __init__(self):
+        self.__name = "Luke"
+        self.name = "luke"
+    def get_name(self):
+        return self.__name
+a = A()
+# print(a.get_name())
+# print(hasattr(a,'get_name'))
+# print(hasattr(a,'__name')
+# print(getattr(a, '__name'))     # 报错
+# print(setattr(a, '__name', "zhangsan"))
+# print(getattr(a, '__name'))     # 设置之后获取到的是zhangsan
+
+
+
+# 12--为类动态绑定属性或方法: MethodType方法
+# 一般创建了一个class的实例后, 可以给该实例绑定任何属性和方法, 这就是动态语言的灵活性
+# class Student(object):
+#     pass
+
+# s = Student()
+# s.name = 'Michael'  # 动态给实例绑定一个属性
+# def set_age(self, age):     # 定义函数作为实例方法
+#     self.age = age
+# from types import MethodType
+# s.set_age = MethodType(set_age, s)  # 给实例绑定一个方法, 类和其它实例不受此印象
+# s.set_age(25)   # 调用实例方法
+# print(s.age)
+# Student.set_age = MethodType(set_age, Student)  # 为类绑定一个方法, 类的所有实例都拥有该方法
+# w = Student()
+# w.set_age(10)
+# print(w.age)
+
+
