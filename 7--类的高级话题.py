@@ -82,8 +82,8 @@ def decorator(aClass):
 
 
 # 5--限制class属性:__slots__属性
-class Student(object):
-    __slots__ = ('name', 'age')     # 限制Student及其实例只能拥有name和age属性
+# class Student(object):
+#     __slots__ = ('name', 'age')     # 限制Student及其实例只能拥有name和age属性
     # __slots__属性只对当前类起作用, 对其子类不起作用
     # __slots__属性能够节省内存
     # __slots__属性可以为列表list, 或者元组tuple
@@ -160,3 +160,75 @@ class Fib(object):
         return self.a
 # for n in Fib():
     # print(n)    # 使用
+# (3) __getitem__方法,__setitem__方法: 定义类的下表操作, 或者切片操作slice
+class Indexer(object):
+    def __init__(self):
+        self.data = {}
+
+    def __getitem__(self, n):   # 定义getitem方法
+        print('getitem', n)
+        return self.data[n]
+
+    def __setitem__(self, key, value):  # 定义setitem方法
+        print('setitem:key = {0}, value = {1}'.format(key, value))
+        self.data[key] =  value
+
+test = Indexer()
+# test[0] = 1     # 调用setitem方法
+# test[0]     # 调用getitem方法
+
+
+
+# (4)__getattr__方法: 定制类的属性操作
+class Student(object):
+    def __getattr__(self, attr):  # 定义当获取类的属性时的返回值
+        if attr == 'age':
+            return 25   # 当获取age属性时返回25
+        raise AttributeError('object has no attribute %s'%attr) # 如果获取不是age属性, 返回异常
+        # 注意: 只有当属性不存在时, 才会调用该方法, 且该方法默认返回None, 需要在函数最后引发异常
+# s = Student()
+# print(s.age)    # 返回25
+# print(s.abcd)   # 获取抛出异常
+
+# (5) __call__方法: 定制类的'可调用性'
+class Student(object):
+    def __call__(self, *args, **kwargs):    # 也可以带参数
+        print("Calling .......")
+
+s = Student()
+# s()     # s变成了可调用的, 也可以带参数
+callable(s)     # 测试s的可调用性, 返回True
+
+
+# (6) __len__方法: 求类的长度
+# def __len__(self):
+#     return len(self.data)
+
+
+
+# 8--动态创建类type()
+# 一般创建类, 需要在代码中提前定义
+class Hello(object):
+    def hello(self, name='world'):
+        print('Hello, %s'%name)
+
+h = Hello()
+# h.hello()   # hello, world
+type(Hello)  # Hello是一个type类型, 返回<class 'type'>
+type(h)  # h是一个Hello类型, 返回<class 'Hello'>
+
+# 动态类型语言中, 类可以动态创建, type函数可用于创建新类型
+def fn(self, name='world'):     # 先定义函数
+    print("Hello2,%s"%name)
+Hello2 = type('abc',(object,),dict(hello=fn))  # 后创建类, 创建Hello2类, abc为Hello2实例的类型, object为超类, dict为方法名/属性的映射. 用这种方法创建类和class Hello2:创建类一样
+
+# type原型: type(name, bases, dict)
+h = Hello2() # 此h和上面h=Hello()一致
+type(Hello2)
+type(Hello2())
+type(Hello())
+
+
+
+
+
