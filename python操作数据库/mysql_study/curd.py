@@ -27,4 +27,5 @@ cur.execute('DELETE FROM genral_tab WHERE card_id=5;')
 cur.execute('SELECT * FROM genral_tab')
 for row in cur:
     print(row)
+con.commit()
 con.close()
