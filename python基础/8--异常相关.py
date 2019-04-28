@@ -66,7 +66,7 @@ class FormatError(Exception):
         self.line = line
         self.file = file
 try:
-    raise FormatError(42, 'test.py')
+    raise FormatError(42, 'check_ip.py')
 except FormatError as X:
     pass
     # print('Error at', X.file, X.line)
@@ -83,7 +83,7 @@ class FormatError(Exception):
     def logger(self):
         open(self.logfile, 'a', encoding='utf-8').write('\nError at {0} {1}'.format(self.file, self.line))
 try:
-    raise FormatError(42,'test.py')
+    raise FormatError(42,'check_ip.py')
 except FormatError as X:
     X.logger()
 
