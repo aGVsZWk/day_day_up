@@ -1,0 +1,169 @@
+# 结构化工程
+仓库的结构: 样例 `https://github.com/navdeep-G/samplemod`
+
+## 仓库的结构
+很重要, 通常有工程的名字, 工程的描述, 一系列的文件, README
+
+样例:
+![](assets/markdown-img-paste-20190806150822297.png)
+
+
+### 真正的模块
+`./sample/` 或 `./sample.py`
+作用: 核心代码
+
+如果模块包是核心, 那应该是使用`./sample`
+如果模块只有一个文件, 那可以直接将文件放在仓库的根目录下: `./sample.py`
+
+### License
+`./LICENSE`
+作用: 许可证
+`https://choosealicense.com/`
+
+### setup file
+`./setup.py`
+作用: 打包和发布管理
+如果模块包在根目录下, 这个文件也应该在根目录下
+
+### requirements file
+`./requirements.txt`
+作用: 开发依赖
+放仓库根目录, 知名完整工程的所有依赖包: 测试, 编译和文档生成.
+
+### Documentation
+`./docs/`
+作用: 包的参考文档
+放仓库根目录
+
+### Test Suite
+`./test_sample.py` 或 `./tests/`
+作用: 包的集合和单元测试
+如果少, 可以放一个文件中; 如果多, 可以放一个目录里
+`./tests/test_basic.py`
+`./tests/test_advanced.py`
+
+如果测试例子需要导入你写的包来进行测试, 有以下几种方式
+1. 将包安装到site-packages中
+2. 通过简单直接的路径设置来解决导入问题
+
+推荐后者
+
+先创建一个包含上下文环境的文件 `./tests/context.py`.
+```python
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import sample
+```
+然后在每一个测试文件中, 导入:
+`from .context import sample`
+
+### Makefile
+`./Makefile`
+作用: 常规的管理任务
+
+样例Makefile:
+```
+init:
+    pip install -r requirements.txt
+
+test:
+    py.test tests
+
+PHONY: init test
+```
+一些其他的常规管理脚本(比如`manage.py`或者`fabfile.py`), 也放在仓库的根目录下.
+
+### 关于django
+`django-admin.py startproject samplesite`
+![](assets/markdown-img-paste-20190806153310238.png)
+
+`django-admin.py startproject samplesite .`
+![](assets/markdown-img-paste-20190806153336198.png)
+
+其实没啥大区别
+
+## 结构化是一把钥匙
+糟糕结构的特征:
+1. 多重且混乱的依赖关系
+2. 隐含耦合: 类中每一个改变都会打破很多不相关的测试用例
+3. 大量使用全局变量或上下文
+4. 面条式代码: 多层嵌套的if语句与for循环, 包含大量复制-粘贴的过程, 且每一合适的分割.
+5. 混沌代码. 上百段相似的逻辑碎片, 通常是缺乏合适结构的类或对象
+
+
+
+## 模块
+
+![](assets/markdown-img-paste-20190806162137616.png)
+
+不推荐在模块名中国使用下划线, **请尽量保持模块名称简单, 以保障无需分开单词. 不要使用下划线命名空间, 而是使用子模块**
+```python
+# OK
+import libary.plugin.foo
+
+# Not OK
+import libary.foo_plugin
+```
+
+`from modu import *`导包较难阅读而且依赖独立性不足, , `from modu import func`能精确定位, 但是多了不好管理. `import modu`导入内容又偏多, 但能解决混乱依赖性问题.
+
+`from modu import func`导入的包会放在全局或局部命名空间中.
+`import modu`则会将modu代码放在模块命名空间中.
+
+![](assets/markdown-img-paste-20190806163950134.png)
+
+用import导入深层嵌套的包最适合起别名: `import very.deep.module as mod`
+
+## 面向对象
+
+要避免不必要的面向对象, 什么时候不需要面向对象:
+web应用, 大量python进程实例同时到达, 容易出现并发问题或竞态条件. 举例: 某个请求将对象加载到内存中并标记它为已读。如果同时另一个请求要删除这个对象，删除操作可能刚好发生在第一个请求加载完该对象之后，结果就是第一个请求标记了一个已经被删除的对象为已读。
+此时使用无状态的函数式就会更好.
+除了并发外, 另一种建议是尽量使用隐式上下文和副作用较小的函数与程序.
+
+面向对象与函数式编程区别: `上下文`
+
+函数编程好处:
+1. 纯函数的结果是确定的：给定一个输入，输出总是固定相同。
+2. 当需要重构或优化时，纯函数更易于更改或替换。
+3. 纯函数更容易做单元测试：很少需要复杂的上下文配置和之后的数据清除工作。
+4. 纯函数更容易操作、修饰和分发。
+
+
+## 装饰器
+pass
+
+## 上下文管理器
+自定义实现open:
+```python
+class CustomOpen(object):
+    def __init__(self, filename):
+        self.file = open(filename)
+
+    def __enter__(self):
+        return self.file
+
+    def __exit__(self, ctx_type, ctx_value, ctx_traceback):
+        return self.close()
+
+with CustomOpen('file') as f:
+    contents = f.read()
+```
+`__enter__`: 当with中内容执行完之后, 会调用`__enter__`, `__enter__`的返回值会通过`as f`赋给f, 注意`__center__`的形参不可缺少!!!
+
+
+
+# 代码风格
+
+# 阅读好的代码
+
+# 文档
+
+# 测试您的代码
+
+# 日志(logging)
+
+# 常见陷阱
+
+# 选择一个许可
