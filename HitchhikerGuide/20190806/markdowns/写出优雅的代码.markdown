@@ -152,7 +152,79 @@ with CustomOpen('file') as f:
 ```
 `__enter__`: 当with中内容执行完之后, 会调用`__enter__`, `__enter__`的返回值会通过`as f`赋给f, 注意`__center__`的形参不可缺少!!!
 
+生成器方式：使用的python自带的contextlib
+```python
+from contextlib import contextmanager
 
+@contextmanager
+def custom_open(filename):
+    f = open(filename)
+    try:
+        yield f
+    finally:
+        f.close()
+
+with custom_open('file') as f:
+    contents = f.read()
+```
+看不懂，但和上面的做法等价。
+
+## 动态类型
+python的变量和其它语言有很大的不同，特别是静态类型语言。变量并不是计算机内存中被写入的某个值，它们只是指向内存的"标签"或"名称"。
+
+避免发生变量经常变换指向的方法:
+- 差
+```python
+a = 1
+a = 'a string'
+def a():
+    pass
+```
+- 好
+```python
+count = 1
+msg = 'a string'
+def func():
+    pass
+```
+使用简短的函数或方法能降低对不相关对象使用同一个名称的风险，即使是相关的不同类型的对象，也更建议使用不同命名。
+- 差
+```python
+items = 'a b c d'
+items = items.split(' ')
+items = set(items)
+```
+
+## 可变与不可变类型
+可变类型不稳定，不能作为字典的键使用。
+
+- 差
+```python
+nums = ''
+for i in range(20):
+    nums += str(n)
+print nums
+```
+- 好
+```python
+nums = []
+for i in range(n):
+    nums.append(str(n))
+print "".join(nums)
+```
+- 更好
+```python
+nums = [str(n) for n in range(20)]
+print ''.join(nums)
+```
+- 最好Best
+```python
+nums = map(str, range(20))
+print ''.join(nums)
+```
+操作字符串，使用join()比使用+要好，也可使用format，最好还是用join()
+
+注意join用于**字符串列表**
 
 # 代码风格
 
