@@ -1,0 +1,186 @@
+# 代码风格
+基本的规范pass
+
+## 在容器中查找一个项
+```python
+s = set(['s', 'p', 'a', 'm'])
+l = ['s', 'p', 'a', 'm']
+
+def lookup_set(s):
+    return 's' in s
+
+def lookup_list(l):
+    return 's' in l
+```
+即使两个函数看起来完全一样，但查找集合利用了python中集合可哈希的特性，二者查询性能完全不同。
+
+## 列表推导
+```python
+a = [3,4 , 5]
+b = [i for i in a if i > 4]
+# Or:
+b = filter(lambda x: x > 4, a)
+```
+
+```python
+a = [3, 4, 5]
+b = [i + 3 for i in a]
+# Or:
+b = map(lambda i: i+3, a)
+```
+
+
+# 阅读好的代码
+
+![](assets/markdown-img-paste-20190807213553247.png)
+
+# 文档
+
+## INSTALL 文件
+如何安装，不是必须的。通常被简化为一个指令并被添加到 README 文件中。
+
+## LICENSE 文件
+应该始终存在并详细说明软件在什么许可证下对公众可用。
+
+## TODO 文件
+TODO 文件或README文件中的 TODO 部分应该列出代码的开发计划。
+
+## CHANGELOG 文件
+CHANGELOG文件或在README对应的部门应该基于最新版本编写一个代码变更概述。
+
+## 其它文档
+
+![](assets/markdown-img-paste-20190807214124654.png)
+
+# 测试您的代码
+
+测试函数尽可能使用厂且描述性的名字。
+
+## 入门
+### Unittest单元测试
+pass，直接看文档即可。
+
+### Doctest
+它会在代码的 Docstrings 中寻找类似于 Python 交互会话的字串（译者注：>>>），并会将其执行，以证实工作正常。
+
+Doctest 模块的使用场景与单元测试有所不同：它们通常不是很详细，并且不会用特别的用例或者处理复杂的 Bug。Doctest 主要是作为模块和其部件主要用例的表述性文档，因此，Doctest 需在每一次完整测试 套件运行时自动运行。
+
+函数中的一个简单 Doctest 例子：
+
+```python
+def square(x):
+    """Return the square of x.
+
+    >>> square(2)
+    4
+    >>> square(-2)
+    4
+    """
+
+    return x * x
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+```
+### pytest
+尽管这个测试工具功能完备，并且可扩展，它仍然能保持语法很简单。创建一个测试组件和写一个带有诸多函数的模块一样容易：
+```python
+# content of test_sample.py
+def func(x):
+    return x + 1
+
+def test_answer():
+    assert func(3) == 5
+```
+运行命令 py.test ：
+```python
+$ py.test
+=========================== test session starts ============================
+platform darwin -- Python 2.7.1 -- pytest-2.2.1
+collecting ... collected 1 items
+
+test_sample.py F
+
+================================= FAILURES =================================
+_______________________________ test_answer ________________________________
+
+    def test_answer():
+>       assert func(3) == 5
+E       assert 4 == 5
+E        +  where 4 = func(3)
+
+test_sample.py:5: AssertionError
+========================= 1 failed in 0.02 seconds =========================
+```
+
+### mock
+unittest.mock 是python中用于测试的一个库。在python3.3版本中，它存在于自带的标准库：`unittest.mock`
+
+可使用mock对象替换部分系统，并对他们的使用进行断言。
+举例：对一个方法打猴子补丁:
+```python
+from unittest.mock import MagicMock
+thing = ProductionClass()
+thing.method = MagicMock(return_value=3)
+thing.method(3, 4, 5, key='value')
+
+thing.method.assert_called_with(3, 4, 5, key='value')
+```
+
+在测试环境下，你可以使用 patch 修饰器来 mock 某个模块中的类或对象。在下面这个例子中，一直返回相同结果的外部查询系统使用 mock 替换（但仅用在测试期间）。
+```python
+def mock_search(self):
+    class MockSearchQuerySet(SearchQuerySet):
+        def __iter__(self):
+            return iter(["foo", "bar", "baz"])
+    return MockSearchQuerySet()
+
+# 这里的 SearchForm 指的是 myapp 引入的类,
+# 而不是类 SearchForm 本身自己
+@mock.patch('myapp.SearchForm.search', mock_search)
+def test_new_watchlist_activities(self):
+    # get_search_results 运行一次搜索并对结果进行迭代
+    self.assertEqual(len(myapp.get_search_results(q="fish")), 3)
+```
+
+
+# 日志(logging)
+日志记录一般有两个目的：
+- 诊断日志：记录与应用程序操作相关的日志。例如，当用户遇到程序报错时，可通过搜索诊断日志以获得上下文信息。
+- 审计日志：为商业分析而记录的日志。从审计日志中，可提取用户的交易信息，并结合其他用户资料构成用户报告，或者用来作为商业目标的数据支撑。
+
+## 使用 (print)
+当需要在命令行应用中显示帮助文档时， print 是一个相对于日志更好的选择。而在其它的时候，日志总能优于 print ，理由如下：
+- 日志事件产生的 日志记录 ，包含清晰可用的诊断信息，如文件名称、路径、函数名和行号等。
+- 包含日志模块的应用，默认可通过根记录器对应用的日志流进行访问，除非你做了日志过滤。
+- 可通过 `logging.Logger.setLevel()` 方法有选择地记录日志， 或可通过设置 `logging.Logger.disabled` 属性为 `True` 来禁用日志记录。
+
+## 在库中记录日志
+pass
+
+## 在应用程序中记录日志
+配置日志的方式：
+- ini格式文件
+    - 优点：使用 `logging.config.listen()` 函数监听 socket，可在运行过程中更新配置。
+    - 缺点：相比代码里控制，可控性要弱（例如：子类化定制的 filters 或 loggers）。
+- 使用字典或 JSON 格式文件：
+    - 优点：除了可在运行时动态更新，在 Python 2.6 之后，还可通过 json 模块从其它文件中导入配置。
+    - 缺点：相比代码里控制，可控性要弱。
+- 使用代码控制：
+    - 优点：相比配置来讲，有绝对的控制。
+    - 缺点：需要对源码进行修改。
+
+# 常见陷阱
+TODO 待补充
+## 字节码文件pyc
+### 禁用字节码文件
+`export PYTHONDONTWRITEBYTECODE=1`
+建议在`~/.profile`里设置此变量。
+
+### 删除字节码文件
+ ```sh
+ find . -type f -name "*.py[co]" -delete -or -type d -name "__pycache__" -delete
+ ```
+
+# 选择一个许可
