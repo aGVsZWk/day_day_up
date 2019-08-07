@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
+import time
 
 
 class NewVisitorTest(unittest.TestCase):
@@ -23,19 +24,33 @@ class NewVisitorTest(unittest.TestCase):
                          inputbox.get_attribute('placeholder'),
                          'Enter a to-do item'
         )
-
         # 她在一个文本输入框中输入了"Buy peacock feathers"(购买孔雀羽毛)
         inputbox.send_keys('Buy peacock feathers')
+        time.sleep(1)
         # 输入回车, 页面显示更新, 在待办事项列表中显示了'Buy peacock feathers'
         inputbox.send_keys(Keys.ENTER)
-
+        time.sleep(1)
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows),
-            'New to-do item did not appear in table'
-        )
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
+        # 再输入其它的待办事项并判断
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+                         inputbox.get_attribute('placeholder'),
+                         'Enter a to-do item'
+        )
+        # 她在一个文本输入框中输入了"Buy peacock feathers"(购买孔雀羽毛)
+        inputbox.send_keys('2: Use peacock feathers to make a fly')
+        time.sleep(1)
+        # 输入回车, 页面显示更新, 在待办事项列表中显示了'Buy peacock feathers'
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('2: Use peacock feathers to make a fly', [
+                row.text for row in rows]
+            )
         self.fail('Finish the test')
         # 可以输入其他内容, 在做其它的事情
 
