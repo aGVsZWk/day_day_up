@@ -1,10 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
+# import unittest
+from django.test import LiveServerTestCase
 import time
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -19,7 +20,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_case_start_a_list_and_retrieve_it_later(self):
         # 测试首页标题和头部包含"To-Do"这个词
-        self.browser.get('http://127.0.0.1:8001')
+        self.browser.get(self.live_server_url)
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
 
@@ -36,7 +37,7 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
         self.check_for_row_in_list_table('1: Buy peacock feathers')
-        time.sleep(10)
+        time.sleep(3)
         # 再输入其它的待办事项并判断
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
@@ -45,7 +46,7 @@ class NewVisitorTest(unittest.TestCase):
         )
         # 她在一个文本输入框中输入了"Buy peacock feathers"(购买孔雀羽毛)
         inputbox.send_keys('Use peacock feathers to make a fly')
-        time.sleep(10)
+        time.sleep(3)
         # 输入回车, 页面显示更新, 在待办事项列表中显示了'Buy peacock feathers'
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
