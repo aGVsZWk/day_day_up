@@ -60,7 +60,9 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.get(self.live_server_url)
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy peacock feathers')
+        time.sleep(2)
         inputbox.send_keys(Keys.ENTER)
+        time.sleep(2)
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # 她注意到了他的待做事项在一个不同的URL中
@@ -70,7 +72,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 来了一个新用户, Francis
         # 退出浏览器, 用新的浏览器会话来保证cookies配置
         self.browser.quit()
-        self.browser = webdriver.Firefix()
+        self.browser = webdriver.Firefox()
 
         # Francis访问了首页
         self.browser.get(self.live_server_url)
@@ -82,8 +84,10 @@ class NewVisitorTest(LiveServerTestCase):
         # Francis开始输入新的待办事项
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
+        time.sleep(2)
         inputbox.send_keys(Keys.ENTER)
-        self.check_for_row_in_list_table('Buy milk')
+        time.sleep(2)
+        self.check_for_row_in_list_table('1: Buy milk')
 
         # Francis获取到了它的待做事项不是之前的URL
         francis_list_url = self.browser.current_url
