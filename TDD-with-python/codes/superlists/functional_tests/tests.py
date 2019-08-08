@@ -27,8 +27,8 @@ class NewVisitorTest(LiveServerTestCase):
         # 应用邀请她输入一个待办事项
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
-                         inputbox.get_attribute('placeholder'),
-                         'Enter a to-do item'
+            inputbox.get_attribute('placeholder'),
+            'Enter a to-do item'
         )
         # 她在一个文本输入框中输入了"Buy peacock feathers"(购买孔雀羽毛)
         inputbox.send_keys('Buy peacock feathers')
@@ -41,28 +41,28 @@ class NewVisitorTest(LiveServerTestCase):
         # 再输入其它的待办事项并判断
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
-                         inputbox.get_attribute('placeholder'),
-                         'Enter a to-do item'
+            inputbox.get_attribute('placeholder'),
+            'Enter a to-do item'
         )
         # 她在一个文本输入框中输入了"Use peacock feathers to make a fly"(用孔雀羽毛做什么东西)
         inputbox.send_keys('Use peacock feathers to make a fly')
-        time.sleep(3)
+        time.sleep(1)
         # 输入回车, 页面显示更新, 在待办事项列表中显示了'2: Use peacock feathers to make a fly'
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
         self.check_for_row_in_list_table('1: Buy peacock feathers')
         self.check_for_row_in_list_table(
             '2: Use peacock feathers to make a fly'
-            )
+        )
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         # 输入新的todo事项
         self.browser.get(self.live_server_url)
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy peacock feathers')
-        time.sleep(2)
+        time.sleep(1)
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(2)
+        time.sleep(1)
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # 她注意到了他的待做事项在一个不同的URL中
@@ -84,9 +84,9 @@ class NewVisitorTest(LiveServerTestCase):
         # Francis开始输入新的待办事项
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
-        time.sleep(2)
+        time.sleep(1)
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(2)
+        time.sleep(1)
         self.check_for_row_in_list_table('1: Buy milk')
 
         # Francis获取到了它的待做事项不是之前的URL
@@ -100,6 +100,39 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
 
+    # def test_layout_and_styling(self):
+    #     # 伊迪斯访问首页
+    #     self.browser.get(self.live_server_url)
+    #     self.browser.set_window_size(1024, 768)
+    #
+    #     # 他看到输入框完美地居中显示
+    #     inputbox = self.browser.find_element_by_id('id_new_item')
+    #     self.assertAlmostEqual(
+    #         inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=5)
+    #
+    #     # 她新建了个清单, 看到输入框扔完美地居中显示
+    #     inputbox.send_keys('testing')
+    #     input.send_keys(Keys.ENTER)
+    #     self.wait_for_row_in_list_table('1: testing')
+    #     inputbox = self.find_element_by_id('id_new_item')
+    #     self.assertAlmostEqual(
+    #         inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=5)
+    #     )
+    #
 
-# if __name__ == "__main__":
-#     unittest.main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
