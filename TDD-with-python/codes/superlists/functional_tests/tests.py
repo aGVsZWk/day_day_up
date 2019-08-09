@@ -1,11 +1,12 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 # import unittest
-from django.test import LiveServerTestCase
+# from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import time
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -22,7 +23,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 测试首页标题和头部包含"To-Do"这个词
         self.browser.get(self.live_server_url)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('To-Do', header_text)
+        self.assertIn('To-do', header_text)
 
         # 应用邀请她输入一个待办事项
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -118,21 +119,3 @@ class NewVisitorTest(LiveServerTestCase):
     #     self.assertAlmostEqual(
     #         inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=5)
     #     )
-    #
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.
