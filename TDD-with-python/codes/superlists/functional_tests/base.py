@@ -1,13 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 # import unittest
 # from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import time
 import sys
+from unittest import skip
+
+MAX_WAIT = 10
 
 
-class NewVisitorTest(StaticLiveServerTestCase):
+class FunctionalTest(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -32,9 +36,20 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser.close()
 
     def check_for_row_in_list_table(self, row_text):
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text, [row.text for row in rows])
+        start_time = time.time()
+        while True:
+            try:
+                table = self.browser.find_element_by_id('id_list_table')
+                rows = table.find_elements_by_tag_name('tr')
+                self.assertIn(row_text, [row.text for row in rows])
+                return
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
+
+
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def test_case_start_a_list_for_one_user(self):
         # 测试首页标题和头部包含"To-Do"这个词
@@ -118,20 +133,52 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
 
+
+class LayoutAndStyingTest(FunctionalTest):
+    pass
     # def test_layout_and_styling(self):
-    #     # 伊迪斯访问首页
+    #     # Edith goes to the home page
     #     self.browser.get(self.server_url)
     #     self.browser.set_window_size(1024, 768)
     #
-    #     # 他看到输入框完美地居中显示
+    #     # She notices the input box is nicely centered
     #     inputbox = self.browser.find_element_by_id('id_new_item')
     #     self.assertAlmostEqual(
-    #         inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=5)
+    #         inputbox.location['x'] + inputbox.size['width'] / 2,
+    #         512,
+    #         delta=5
+    #     )
     #
-    #     # 她新建了个清单, 看到输入框扔完美地居中显示
+    #     # She starts a new list and sees the input is nicely
+    #     # centered there too
     #     inputbox.send_keys('testing')
-    #     input.send_keys(Keys.ENTER)
+    #     inputbox.send_keys(Keys.ENTER)
     #     self.wait_for_row_in_list_table('1: testing')
-    #     inputbox = self.find_element_by_id('id_new_item')
+    #     inputbox = self.browser.find_element_by_id('id_new_item')
     #     self.assertAlmostEqual(
-    #         inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=5)
+    #         inputbox.location['x'] + inputbox.size['width'] / 2,
+    #         512,
+    #         delta=5
+    #     )
+
+
+class ItemValidationTest(FunctionalTest):
+
+    @skip
+    def test_can_add_empty_list_items(self):
+        # 测试是否能提交空事项
+        # 伊迪斯访问首页, 不小心提交了一个空待办事项
+        # 输入框中没输入内容, 他就按下了回车键
+
+        # 首页刷新了, 显示一个错误消息
+        # 提示待办事项不能为空
+
+        # 他输入一些文字, 然后再次提交了, 这次没问题了
+
+        # 他又提交了一个空待办事项
+
+        # 他在清单页面又看到了类似的错误消息
+
+        # 输入文字之后提交就没问题了
+
+        self.fail('write me!')
