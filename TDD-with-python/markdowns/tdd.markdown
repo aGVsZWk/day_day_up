@@ -69,3 +69,12 @@ except ValidationError:
 
 # 模板注释重复
 模板中jinja2语法, {% block xxx %} {% endblock %}. xxx不允许重复, 即使是在注释中也不行.
+
+
+
+# 表单处理
+将Form的属性转换为input标签的name. 没有placeholder属性和css类.
+指定属性要用widget. 最先要指定input标签的type
+`form.as_p()`input标签外面用p标签包围.
+
+注意`widget`和`widgets`很坑, 两个不一样.
