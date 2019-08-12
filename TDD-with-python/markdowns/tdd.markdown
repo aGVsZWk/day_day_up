@@ -48,3 +48,24 @@ TDD流程中的主要概念:
 
 # 参数命名
 如果一定要和python自带的冲突, 那就在后面加下划线吧. `list_`
+
+
+
+# self.assertRaises上下文管理器
+新的单元测试方法, 检查做某件事是否会抛出异常, 可使用`self.assertRaises`.
+```python
+with self.assertRaises(ValidationError):
+    item.save()
+```
+等效于:
+```python
+try:
+    item.save()
+    self.fail('The save should have raised an exception')
+except ValidationError:
+    pass
+```
+
+
+# 模板注释重复
+模板中jinja2语法, {% block xxx %} {% endblock %}. xxx不允许重复, 即使是在注释中也不行.

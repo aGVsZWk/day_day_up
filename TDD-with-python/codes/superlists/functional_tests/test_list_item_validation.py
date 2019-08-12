@@ -25,8 +25,6 @@ class ItemValidationTest(FunctionalTest):
         # 他又提交了一个空待办事项
         self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
         # 他在清单页面又看到了类似的错误消息
-        self.wait_for(lambda: self.assertEqual(
-                error.text, "You can't have an empty list item"))
         error = self.browser.find_element_by_css_selector('.has-error')
         # self.assertEqual(error.text, "You can't have an empty list item")
         self.wait_for(lambda: self.assertEqual(
