@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="example1"></div>
+    <div id="example2"></div>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <!-- 操作虚拟DOM -->
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <!-- 兼容ES6语法 -->
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <script type="text/babel">
+    // 创建虚拟DOM对象
+    // React.createElement('h1', {'id': 'myTitle'}, 'title')
+    let element1 = React.createElement('h1', {id: 'box1', className: 'box1'}, 'React.createElement创建的虚拟DOM对象');
+    ReactDOM.render(element1, document.getElementById('example1'));
+    // JSX创建的虚拟DOM对象
+    let element2 = <h3>JSX创建的虚拟DOM对象</h3>;
+    ReactDOM.render(element2, document.getElementById('example2'));
+
+
+</script>
+
+</body>
+
+</html>
