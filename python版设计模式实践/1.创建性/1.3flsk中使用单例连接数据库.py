@@ -2,15 +2,12 @@
 # author: Luke
 # -*- coding: utf-8 -*-
 
-
 import sqlite3
 from flask import current_app, Flask
 from flask import _app_ctx_stack as stack
 
 
-
 class SQLite3(object):
-
     def __init__(self, app=None):
         self.app = app
         if app is not None:
@@ -52,8 +49,6 @@ class SQLite3(object):
 
 if __name__ == '__main__':
     app = Flask("__main__")
-    app.config.update(
-        {'SQLITE3_DATABASE':'sqlite:///foo.db'}
-    )
+    app.config.update({'SQLITE3_DATABASE': 'sqlite:///foo.db'})
     db = SQLite3(app).connection
     app.run()
