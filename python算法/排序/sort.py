@@ -38,7 +38,7 @@ def mergeSort(target, p, r):
         q = (p + r) // 2
         # 分解
         mergeSort(target, p, q)
-        mergeSort(target, p+1, r)
+        mergeSort(target, q+1, r)
         # 解决+合并
         merge(target, p, q, r)
     return target
