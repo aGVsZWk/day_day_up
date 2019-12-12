@@ -12,10 +12,9 @@ class StackDemos(object):
             if i not in paren_dict:
                 self.stack.push(i)
             else:
-                if i in paren_dict:
-                    top_elem = self.stack.pop() if not self.stack.isEmpty() else "#"
-                    if paren_dict[i] != top_elem:
-                        return False
+                top_elem = self.stack.pop() if not self.stack.isEmpty() else "#"
+                if paren_dict[i] != top_elem:
+                    return False
         return True if self.stack.isEmpty() else False
 
 import unittest
