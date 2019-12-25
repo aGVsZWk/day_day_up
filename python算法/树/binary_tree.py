@@ -40,6 +40,35 @@ class BinaryTree(object):
         if self.rightChild:
             self.rightChild.preorder()
 
+    def inorder(self):
+        # 中序遍历
+        if self.leftChild:
+            self.leftChild.inorder()
+        print(self.key)
+        if self.rightChild:
+            self.rightChild.inorder()
+
+    def postorder(self):
+        if self.leftChild:
+            self.leftChild.postorder()
+        if self.rightChild:
+            self.rightChild.postorder()
+        print(self.key)
+
+    def levelorder(self):
+        current, result = [self], []
+        while current:
+            next_level, vals = [], []
+            for node in current:
+                vals.append(node.key)
+                if node.left:
+                    next_level.append(node.left)
+                if node.right:
+                    next_level.append(node.right)
+            current = next_level
+            result.append(vals)
+        return result
+
 
 import unittest
 
