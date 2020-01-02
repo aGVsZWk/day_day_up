@@ -68,6 +68,24 @@ def merge(target, p, q, r):
             target[k] = l2[j]
             j += 1
 
+# 快速排序
+def quickSort(target, p, r):
+    if p < r:
+        q = partition(target, p, r)
+        quickSort(target, p, q-1)
+        quickSort(target, q+1, r)
+    return target
+
+def partition(target, p, r):
+    # 每次选取最右侧元素作为主元，循环结束之后，将主元的正确位置返回
+    key = target[r]
+    i = p - 1
+    for j in range(p, r):
+        if target[j] <= key:
+            i += 1
+            target[i], target[j] = target[j], target[i]
+    target[i+1], target[r] = target[r], target[i+1]
+    return i + 1
 
 import unittest
 
@@ -87,6 +105,9 @@ class TestSort(unittest.TestCase):
 
     def test_merge_sort(self):
         self.assertEqual(self.result, mergeSort(self.target, 0, len(self.target)-1))
+
+    def test_quick_sort(self):
+        self.assertEqual(self.result, quickSort(self.target, 0, len(self.target)-1))
 
 if __name__ == '__main__':
     unittest.main()
