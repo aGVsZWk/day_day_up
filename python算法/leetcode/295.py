@@ -36,7 +36,7 @@ class MedianFinder(object):
                 t = min(self.small_queue)
                 self.small_queue.remove(t)
                 self.big_queue.append(t)
-                self.small_queue.append(t)
+                self.small_queue.append(num)
 
 
     def findMedian(self):
