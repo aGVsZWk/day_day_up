@@ -87,6 +87,19 @@ def partition(target, p, r):
     target[i+1], target[r] = target[r], target[i+1]
     return i + 1
 
+def shellSort(target):
+    step = len(target) // 2
+    while step > 0:
+        for j in range(step, len(target)):
+            key = target[j]
+            i = j - step
+            while i >= 0 and target[i] > key:
+                target[i+step] = target[i]
+                i -= step
+            target[i+step] = key
+        step //= 2
+    return target
+
 import unittest
 
 class TestSort(unittest.TestCase):
@@ -108,6 +121,11 @@ class TestSort(unittest.TestCase):
 
     def test_quick_sort(self):
         self.assertEqual(self.result, quickSort(self.target, 0, len(self.target)-1))
+
+    def test_shell_sort(self):
+        import random
+        self.case = [random.randint(-10000, 10000) for i in range(1000)]
+        self.assertEqual(sorted(self.case), shellSort(self.case))
 
 if __name__ == '__main__':
     unittest.main()
