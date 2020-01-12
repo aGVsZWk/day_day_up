@@ -1,20 +1,3 @@
-# class Solution(object):
-#     def findKthLargest(self, nums, k):
-#         """
-#         :type nums: List[int]
-#         :type k: int
-#         :rtype: int
-#         """
-#         l = nums[:k]
-#
-#         for i in range(k, len(nums)):
-#             if nums[i] > min(l):
-#                 l.remove(min(l))
-#                 l.append(nums[i])
-#         return min(l)
-#
-#
-#
 class Solution(object):
     def findKthLargest(self, nums, k):
         """
@@ -22,32 +5,20 @@ class Solution(object):
         :type k: int
         :rtype: int
         """
-        import heapq
-        heapq.heapify(nums)
-        for i in range(len(nums) + 1 -k):
-            t = heapq.heappop(nums)
-        return t
-
-class Solution(object):
-    def findKthLargest(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: int
-        """
-        return self.findKthLargestHelper(nums, 0, len(nums) - 1, len(nums) + 1 - k)
+        return self.findKthLargestHelper(nums, 0, len(nums) - 1, len(nums) - k)
 
     def findKthLargestHelper(self, nums, p, r, i):
         if p == r:
             return nums[p]
         q = self.randomPartation(nums, p, r)
-        k = q - p + 1
-        if i == k:
+        if q < p or q > r:
+            print('error')
+        if q == i:
             return nums[q]
-        elif i < k:
+        elif q > i:
             return self.findKthLargestHelper(nums, p, q-1, i)
         else:
-            return self.findKthLargestHelper(nums, q+1, r, i-k)
+            return self.findKthLargestHelper(nums, q+1, r, i)
 
     def randomPartation(self, nums, p, r):
         import random
@@ -68,5 +39,6 @@ class Solution(object):
 if __name__ == '__main__':
     s = Solution()
     l = [1, 5, 6, 4, 2, 3]
-    t = s.findKthLargest(l, 2)
+    # t = s.findKthLargestHelper(l, 0, len(l)-1, 0)
+    t = s.findKthLargest(l, 3)
     print(t)

@@ -79,13 +79,14 @@ def quickSort(target, p, r):
 def partition(target, p, r):
     # 每次选取最右侧元素作为主元，循环结束之后，将主元的正确位置返回
     key = target[r]
-    i = p - 1
+    i = p
+    # i 是所有大于主元的元素，扫描到比主元小的元素，就换一次！把所有 i 换成小于的，前面的元素就会比后面的小！完事！！！
     for j in range(p, r):
         if target[j] <= key:
-            i += 1
             target[i], target[j] = target[j], target[i]
-    target[i+1], target[r] = target[r], target[i+1]
-    return i + 1
+            i += 1
+    target[i], target[r] = target[r], target[i]
+    return i
 
 def shellSort(target):
     step = len(target) // 2
