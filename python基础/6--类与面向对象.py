@@ -56,14 +56,14 @@ bob = Person()
 # 6--类方法调用的两种方式
 # instance.method(arg...) # 实例.方法(参数)
 # class.method(instance, arg...)    # 类名.方法(实例, 参数)
-# class A():
+# class A:
 #     def test(self, *args):
-#         print("A-test", args)
+#         print("A-test", self, args)
 
 # a = A()
 # a.test(1234)
 # A.test(a, 1234, 5678)
-
+# A.test(A(), 123, 123, 454)
 
 
 
@@ -214,5 +214,3 @@ a = A()
 # w = Student()
 # w.set_age(10)
 # print(w.age)
-
-

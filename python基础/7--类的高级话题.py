@@ -28,8 +28,8 @@ class FooChild(FooParent):
         FooParent.bar(self, message)
         print(message + ' from Child')
 
-# fooChild = FooChild(10)
-# fooChild.bar('HelloWorld')
+fooChild = FooChild(10)
+fooChild.bar('HelloWorld')
 
 # 实例方法 / 静态方法 / 类方法
 # class Methods(object):
@@ -227,8 +227,3 @@ h = Hello2() # 此h和上面h=Hello()一致
 type(Hello2)
 type(Hello2())
 type(Hello())
-
-
-
-
-
