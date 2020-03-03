@@ -12,13 +12,12 @@ def insertSort(target):
 
 # 选择排序
 def selectSort(target):
-    for i in range(0, len(target)):
-        min_ = target[i]
+    for i in range(0, len(target) - 1):
+        t = i
         for j in range(i+1, len(target)):
-            if min_ > target[j]:
-                # 交换
-                min_, target[j] = target[j], min_
-        target[i] = min_
+            if target[j] < target[t]:
+                t = j
+        target[i], target[t] = target[t], target[i]
 
     return target
 
