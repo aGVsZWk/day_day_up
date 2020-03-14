@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="./node_modules/react/umd/react.development.js"></script>
+    <script src="./node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="./node_modules/babel-standalone/babel.js"></script>
+
+</head>
+
+<body>
+    <div id="reactDom">
+
+    </div>
+    <script type="text/babel">
+
+        function Com(props) {
+            return (
+                <div>我是一个无状态组件，外部传递的数据是----{props.text}-----{props.num}</div>
+            )
+        }
+        // ReactDOM.render(<Com text="aaa"></Com>, document.getElementById('reactDom'))
+        class MyCom extends React.Component{
+            // ES6 子类不管写不写 constructor 在 new 实例的时候都会带上 constructor
+            // state 在 constructor 中定义
+            constructor(props) {
+                super(props)
+                this.state = {
+                    name: "嘻嘻",
+                    newHtml: "<p>我是传奇</p>"
+                }
+            }
+            fun = () => {
+                this.setState({
+                    name:"哈哈"
+                }, ()=>{
+                    console.log(this.state.name);
+                })
+            }
+            render() {
+                return (
+                    <div>
+                        <button onClick={()=>{this.setState({name:"嘻嘻"})}}>改变</button>
+                        <button onClick={this.fun}>改变</button>
+                        <div>state 中数据：----{this.state.name}</div>
+                        <div dangerouslySetInnerHTML={{__html:this.state.newHtml}}></div>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<MyCom></MyCom>, document.getElementById('reactDom'))
+    </script>
+
+</body>
+
+</html>
