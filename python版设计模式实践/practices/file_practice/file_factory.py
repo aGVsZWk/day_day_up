@@ -58,6 +58,17 @@ class ExcelFile(File):
     def can_be_upload(self):
         return True
 
+
+class ShowFormer(object):
+    # 策略
+    def __init__(self, file_obj):
+        self._file_obj = file_obj
+
+    def former(self):
+        return self._file_obj.former()
+
+
+
 class Dumper(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def dump(self):
@@ -118,6 +129,7 @@ class Coser(object):
 
 
 class Saver(object):
+    # 外观
     def __init__(self, file, validater, dumper):
         self._file = file
         self._validater = validater
@@ -130,6 +142,7 @@ class Saver(object):
             return False
 
 class Uploader(object):
+    # 外观
     def __init__(self, file, coser):
         self._file = file
         self._coser = coser
@@ -146,6 +159,7 @@ class Client(object):
     def __init__(self):
         pass
 
+    # 外观
     def save_file(self, saver):
         if saver.can_save_file():
             return "save file"
