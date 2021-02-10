@@ -1,0 +1,50 @@
+document = [
+    {
+        '_id': '53102b43bf1044ed8b0ba36b',
+
+        # 题目
+        'subject': 'subject1',
+
+        # 来源机构
+        'source': {
+            # 机构名称
+            'organization': 'organization1',
+
+            # 学期
+            'term': [
+                {
+                    # 学期名称
+                    'name': '',
+
+                    # 课次
+                    'course': [
+                        {
+                            # 课次名称
+                            'name': '',
+
+                            # 模块
+                            'module': '',
+                        },
+                    ],
+
+                    # 标签
+                    'tags': ['tag1', 'tag2'],
+                },
+            ]
+        }
+    },
+]
+
+"""
+设计理由：https://docs.mongodb.com/manual/core/data-model-design/
+优点：
+1. 使用内嵌式建模，一次查询即可获得所需数据，这也是官方推荐的模式
+2. 维持了数据逻辑上的完整性，可以将一整项数据作为一个整体来操纵
+3. 更新相关数据可以保证原子性
+
+缺点：
+1. 嵌套过多会让查询和更新更加复杂
+2. BSON 文档大小限制在 16 megabytes
+2. 随着数据量增加，查询时间会变长
+"""
+

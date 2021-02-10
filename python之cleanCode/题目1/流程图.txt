@@ -1,0 +1,40 @@
+代码结构：
+- main.py                   入口函数
+
+- module
+    - order_detail.py       处理订单详情信息类
+    - discount
+        - EnumDiscount.py   优惠枚举类
+        - half_price.py     半价优惠信息处理类
+        - money_off.py      满减优惠信息处理类
+
+- model
+    - food.py               餐品数据类
+    - discount.py           优惠信息类
+
+- lib
+    - utils.py              工具模块（自定义log函数，单例装饰器）
+
+- etc
+    - config.py             配置文件
+
+- test
+    - auto_test.py          自动测试脚本
+    - test.py               单元测试
+
+
+处理流程：
+
+- 解析输入，生成餐品对象列表
+
+- 生成餐品列表信息
+
+- 生成优惠信息
+    - 判断优惠类型
+        - 计算多种优惠方式的最终价格
+        - 在多种优惠方式中选择价格最低的一种
+    - 根据优惠类型生成对应的优惠信息
+
+- 生成最终价格信息
+
+- 拼接三种信息

@@ -9,4 +9,3 @@ data = [
 ids = [2, 3, 1, 4]
 
 data.sort(key=lambda x: ids.index(x['id']))
-data
